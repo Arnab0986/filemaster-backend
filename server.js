@@ -24,24 +24,24 @@ if (!fs.existsSync(PROCESSED_DIR)) {
 }
 
 // Middleware
-app.use(cors()); // Enable CORS for all routes
+app.use(cors()); // Enable CORS for all routes (can be more restrictive in production)
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 app.use(rateLimiter); // Apply rate limiting
 
-// Serve static files from the 'processed' directory
+// Serve static files from the 'processed' directory (for downloads)
 app.use('/processed', express.static(PROCESSED_DIR));
 
-// Routes
+// API Routes
 app.use('/api/files', fileRoutes);
-
-// Error handling middleware
-app.use(errorHandler);
 
 // Basic route for testing
 app.get('/', (req, res) => {
   res.send('Filemater Pro Backend API is running!');
 });
+
+// Error handling middleware (should be last middleware)
+app.use(errorHandler);
 
 // Start the server
 app.listen(PORT, () => {

@@ -1,0 +1,29 @@
+# This file defines the infrastructure for your Filemater Pro BACKEND on Render.
+
+services:
+  - type: web
+    name: filemater-pro-backend
+    # The root directory for this service relative to the repository root.
+    # We specify 'filemaster-backend/' because this service is ONLY for the backend.
+    rootDirectory: filemaster-backend/
+
+    # Build command to install dependencies ONLY for the backend.
+    buildCommand: npm install
+
+    # Start command for the Node.js backend.
+    startCommand: npm start
+
+    # Environment variables for the service.
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000 # Render automatically sets PORT, but it's good practice to define a default.
+
+    # Buildpacks are used to detect and build your application.
+    # We need Node.js for the application and FFmpeg for audio/video processing.
+    buildpacks:
+      - name: Node.js
+        url: https://github.com/render-examples/node
+      - name: FFmpeg
+        url: https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git # A common FFmpeg buildpack
